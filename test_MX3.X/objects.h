@@ -8,6 +8,7 @@
 #ifndef GAME_H
 #define	GAME_H
 #define MAX_SIZE 16
+#define GAMEPLAY_SIZE 32
 /*
  * Elements within the game and their attributes
  * 1. Bird
@@ -26,9 +27,7 @@
 
 
 typedef struct Bird{
-    enum {BOTTOM, TOP} birdPosition;
-    enum {ALIVE, DEAD} birdState;
-    enum {FALSE, TRUE} birdCollision;
+    int birdCurrentPosition;
     char birdStateAlive;
     char birdStateDead;
 } Bird;
@@ -41,12 +40,14 @@ typedef struct Obstacle{
      * track2 / track1
      * track2 / track2 shifted
      */
-    char topTrack[MAX_SIZE - 1]; //Index 0 of LCDsize is occupied by birdState
-    char bottomTrack[MAX_SIZE - 1];
+    char topTrack[GAMEPLAY_SIZE]; //Index 0 of LCDsize is occupied by birdState
+    char bottomTrack[GAMEPLAY_SIZE];
     int trackIndex;
 } Obstacle;
 
 typedef struct LCD{
+    char topLCDBUFFER[MAX_SIZE];
+    char bottomLCDBUFFER[MAX_SIZE];
     char topLCD[MAX_SIZE];
     char bottomLCD[MAX_SIZE];
     int LCDindex;
