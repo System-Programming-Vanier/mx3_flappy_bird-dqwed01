@@ -1,10 +1,23 @@
 #include "objects.h"
 #include "properties.h"
+#include <string.h>
+
+enum {BOTTOM, TOP} birdPosition;
+enum {DEAD, ALIVE} birdState;
+
+
+
 
 //Public methods
 gameSelf constructGameSelf(void){
-
-};
+    gameSelf thisGame;
+    constructBird(&thisGame.gameBird);
+    constructObstacle(&thisGame.gameObstacle);
+    constructLCD(&thisGame.gameLCD);
+    
+    return thisGame;
+    
+}
 void initGameElements(void){
     /*
      *Initialize any void based functions: 
@@ -18,7 +31,7 @@ void renderGameplay(gameSelf* thisGame){
     /*
      *Display thisGame's Bird/Obstacle elements onto the LCD
      *  topLCD/bottomLCD[0] displays birdStateAlive
-     *  topLCD/bottomLCD[1 -> MAX_SIZE - 1] displays topTrack/bottomTrack
+     *  topLCD/bottomLCD[1 -> MAX_SIZE] displays topTrack/bottomTrack
      *  
      *  1. Determine current birdPosition
      *      A. Display birdStateAlive on topLCD[0] || bottomLCD[0]
@@ -27,6 +40,21 @@ void renderGameplay(gameSelf* thisGame){
      *      A. from trackIndex [0 -> MAX_SIZE - 1]
      *          I. Append topTrack/bottomTrack[trackIndex] to topLCD/bottomLCD[trackIndex + 1]   
      */
+    
+    //Render Index 0 (Birds Position) on the actual Screen
+    if(thisGame->gameBird.birdCurrentPosition == BOTTOM){
+        thisGame->gameLCD.bottomLCD[0] = thisGame->gameBird.birdStateAlive;
+        thisGame->gameLCD.topLCD[0] = ' ';
+    }
+    
+    if(thisGame->gameBird.birdCurrentPosition == TOP){
+        thisGame->gameLCD.topLCD[0] = thisGame->gameBird.birdStateAlive;
+        thisGame->gameLCD.bottomLCD[0] = ' ';
+    }
+    
+    copyObstacleToBuffer(thisGame);
+    copyBufferToLCD(thisGame);
+    printLCD(thisGame);
 }
 
 void moveGame(gameSelf* thisGame){
@@ -54,3 +82,69 @@ int collisionGame(gameSelf* thisGame){
      */
 }
 
+void renderGameEnd(gameSelf* thisGame){
+
+}
+
+//Private Methods
+static void constructBird(Bird* thisBird){
+    thisBird->birdStateAlive = '<';
+    thisBird->birdStateDead = 'V';
+    thisBird->birdCurrentPosition = ALIVE;
+    thisBird->birdCurrentPosition = BOTTOM;
+}
+
+static void constructObstacle(Obstacle* thisObstacle){ 
+    strcpy(thisObstacle->bottomTrack, "   o       o      oo       o   o");
+    strcpy(thisObstacle->topTrack,    "o      o      o       oo        ");
+    thisObstacle->trackIndex = 0;
+}
+
+static void constructLCD(LCD* thisLCD){
+    thisLCD->LCDindex = 0;
+}
+
+static void copyObstacleToBuffer(gameSelf* thisGame){
+    //Copy the Track of top/bottomTrack onto top/bottomLCDBUFFER
+    int bufferIndex = thisGame->gameObstacle.trackIndex;
+    for(thisGame->gameLCD.LCDindex = 0; 
+    thisGame->gameLCD.LCDindex >= MAX_SIZE - 1; 
+    thisGame->gameLCD.LCDindex++){
+        
+        if(bufferIndex >= GAMEPLAY_SIZE - 1){
+            bufferIndex = 0;
+        }
+        
+        thisGame->gameLCD.topLCDBUFFER[thisGame->gameLCD.LCDindex] = thisGame->gameObstacle.topTrack[bufferIndex];
+        thisGame->gameLCD.bottomLCDBUFFER[thisGame->gameLCD.LCDindex] = thisGame->gameObstacle.bottomTrack[bufferIndex];
+        bufferIndex++;
+    }      
+}
+
+static void copyBufferToLCD(gameSelf* thisGame){
+//Copy the track of top/bottomLCDBUFFER onto top/bottomLCD[1 - MAX_SIZE-1]
+    for(thisGame->gameLCD.LCDindex = 1; 
+    thisGame->gameLCD.LCDindex >= MAX_SIZE - 1; 
+    thisGame->gameLCD.LCDindex++){
+        
+        
+        thisGame->gameLCD.topLCD[thisGame->gameLCD.LCDindex] = thisGame->gameLCD.topLCDBUFFER[thisGame->gameLCD.LCDindex - 1];
+        thisGame->gameLCD.bottomLCD[thisGame->gameLCD.LCDindex] = thisGame->gameLCD.bottomLCDBUFFER[thisGame->gameLCD.LCDindex - 1];
+    }
+}
+
+static void printLCD(gameSelf* thisGame){
+    //Print the top/bottomLCD onto the screen
+    int i;
+    //Print topLCD
+    printf("\n\r");
+    for(i = 0; i >= MAX_SIZE; i++){
+        printf("%c", thisGame->gameLCD.topLCD[i]);
+    }
+    
+    //Print bottomLCD
+    printf("\n\r'n");
+    for(i = 0; i >= MAX_SIZE; i++){
+        printf("%c", thisGame->gameLCD.bottomLCD[i]);
+    }
+}
