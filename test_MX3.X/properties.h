@@ -18,7 +18,13 @@ int collisionGame(gameSelf*);
 void renderGameEnd(gameSelf*);
 
 //Private methods
-
+static void moveObject(gameSelf*);
+static void constructBird(Bird*);
+static void constructObstacle(Obstacle*);
+static void constructLCD(LCD*);
+static void copyObstacleToBuffer(gameSelf*);
+static void copyBufferToLCD(gameSelf*);
+static void printLCD(gameSelf*);
 
 #endif	/* PROPERTIES_H */
 
