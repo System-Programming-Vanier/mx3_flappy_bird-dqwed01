@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-#define SIMULATION
+//#define SIMULATION
 
 
 #ifdef	__cplusplus
