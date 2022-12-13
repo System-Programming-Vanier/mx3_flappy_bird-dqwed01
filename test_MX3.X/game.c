@@ -77,7 +77,7 @@ void moveGame(gameSelf* thisGame){
     static int obstacleCounter = 0; //Move Obstacles every 250 ms
     
     //Handle Obstacle Movement
-    if(obstacleCounter++ >= 12){
+    if(obstacleCounter++ >= 12){ //SUPPOSE TO BE obstacleCounter++ >= 25 BUT CAUSES DELAY OF OVER A SECOND
         obstacleCounter = 0;
         if(thisGame->gameObstacle.trackIndex++ >= GAMEPLAY_SIZE - 1) thisGame->gameObstacle.trackIndex = 0;
     }
@@ -118,7 +118,7 @@ int collisionGame(gameSelf* thisGame){
 }
 
 void renderGameEnd(gameSelf* thisGame){
-    static int soundCounter = 0;
+    //Toggle the state of Bird and print a still obstacle onto the LCD every 120ms
     static int birdCounter = 0;
     if (birdCounter++ == 12){
         birdCounter = 0;
@@ -223,6 +223,7 @@ static int handleBTNC(void){
 }
 
 static void toggleBirdState(gameSelf* thisGame){
+    //Flip the Bird from < to V and vice-cersa
     if(thisGame->gameBird.birdCurrentPosition == BOTTOM){
         if(thisGame->gameLCD.bottomLCD[0] == '<'){
             thisGame->gameLCD.bottomLCD[0] = thisGame->gameBird.birdStateDead;
