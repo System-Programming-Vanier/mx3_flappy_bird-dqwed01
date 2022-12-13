@@ -48,38 +48,32 @@ int main( void){
     stdio_set(C_LCD);
 #endif
     //Init Components
-    heartbeat_init();
+    init_heartbeat();
     initGameElements();
+    init_tone();
     gameSelf game = constructGameSelf();
     int stamp = tick_get();
-    int objectCounter = 0;
-    int soundCounter = 0;
-    
+    tone_high(1000);
     //Game is active
-    do {
+    while(1){
+        heartbeat(); // periodic skip counter to blink a blue LED
         if(tick_diff(stamp) >= TEN_MS){
             stamp = tick_get();
-            //heartbeat(); // periodic skip counter to blink a blue LED
+
             renderGameplay(&game); //Display objects 
             moveGame(&game); //Handle Input
             }
-    } while(collisionGame(&game));
+        if (!collisionGame(&game)) break;
+    }
     
         
     //Game over
     while(1){
         //Toggle Bird every 125ms
-        if((float) tick_diff(stamp) >= (float)TEN_MS * 12.5){
+        heartbeat(); // periodic skip counter to blink a blue LED
+        if (tick_diff(stamp) >= TEN_MS){
             stamp = tick_get();
             renderGameEnd(&game);
-            soundCounter++;
-        }
-        //Play Sound other second
-        if(soundCounter == 8){
-            stamp = tick_get();
-            soundCounter = 0;
-            tone_high(10);
-            tone_low(5);
         }
     }
     return 0;

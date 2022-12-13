@@ -25,6 +25,8 @@ static void constructLCD(LCD*);
 static void copyObstacleToBuffer(gameSelf*);
 static void copyBufferToLCD(gameSelf*);
 static void printLCD(gameSelf*);
+static int handleBTNC(void);
+static void toggleBirdState(gameSelf*);
 
 #endif	/* PROPERTIES_H */
 

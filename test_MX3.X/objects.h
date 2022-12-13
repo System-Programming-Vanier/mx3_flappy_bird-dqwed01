@@ -9,6 +9,8 @@
 #define	GAME_H
 #define MAX_SIZE 16
 #define GAMEPLAY_SIZE 32
+#define BTNC PORTFbits.RF0;
+
 /*
  * Elements within the game and their attributes
  * 1. Bird
