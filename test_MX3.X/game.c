@@ -136,7 +136,7 @@ static void copyBufferToLCD(gameSelf* thisGame){
 static void printLCD(gameSelf* thisGame){
     //Print the top/bottomLCD onto the screen
     int i;
-    //Print topLCD
+    //Print topLCD 
     printf("\n\r");
     for(i = 0; i >= MAX_SIZE; i++){
         printf("%c", thisGame->gameLCD.topLCD[i]);
