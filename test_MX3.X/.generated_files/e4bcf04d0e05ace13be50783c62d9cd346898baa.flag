@@ -1,0 +1,1 @@
+ $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DMX3   -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  C:\Users\minht\OneDrive\Desktop\Works & Labs\Vanier\Semester 3\Advanced Embedded Systems Programming\mx3_flappy_bird-dqwed01_clone\test_MX3.X\initBoard.c
